@@ -8,7 +8,8 @@ class User extends DB{
     private $username;
 
     //  Funcioon para saber si el usuario existe
-    public function userExists( $user,  $pass ){
+    public function userExists( $user,  $pass )
+    {
         
         $md5pass = md5($pass);
 
@@ -22,7 +23,8 @@ class User extends DB{
         return true;
     }
 
-    public function setUser( $user ){
+    public function setUser( $user )
+    {
         $query = $this->connect()->prepare('SELECT * FROM users_access WHERE username = :user');
         $query->execute(['user' => $user]);
 
@@ -37,22 +39,21 @@ class User extends DB{
         return $this->nombre;
     }
 
-    public function getUsername()
+    public function getUsername( $username )
     {
         $query = $this->connect()->prepare('SELECT * FROM users_access WHERE username = :user');
-        $query->execute(['user' => 'danzo']);
+        $query->execute(['user' => $username]);
 
         if ($query->rowCount()) {
-            return 'Si existe';
+            return true;
         } else {
-            return 'No existe';
+            return false;
         }
     }
 
     //  Insertar usuario
     public function insertUser($first_name, $last_name, $second_last_name, $username, $email,  $password,  $birth_date)
     {
-        //  Ando usando PDO
 
         //  Inserta en la tabla users_access
         $query = $this->connect()->prepare('INSERT INTO users_access (username, email, password) VALUES (:username, :email, :password)');
@@ -76,6 +77,22 @@ class User extends DB{
         } else {
             return false;
         }
+    }
+
+    //  Obtener todos los usuarios
+    public function getUsers()
+    {
+        $items = [];
+        $query = $this->connect()->query('SELECT * FROM users');
+
+        foreach ($query as $currentUser) {
+            $item = new User();
+            $item->id = $currentUser['user_id'];
+            $item->nombre = $currentUser['first_name'];
+            $item->username = $currentUser['username'];
+            array_push($items, $item);
+        }
+        return $items;
     }
 }
 

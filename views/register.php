@@ -37,7 +37,14 @@ if (isset($_SESSION['user'])) {
                         <form action="../back/register.php" method="POST">
                             <?php
                             if (isset($errorRegister)) {
+                                ?>
+                                <div class="alert alert-danger" role="alert">
+                                <?php
                                 echo $errorRegister;
+                                unset($errorRegister);
+                                ?>
+                                </div>
+                                <?php
                             }
                             ?>
                             <div class="mb-3">
