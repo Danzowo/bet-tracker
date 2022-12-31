@@ -1,2 +1,2 @@
 # bet-tracker
-Manage all your bets in one page
+Manage all your bets in a single page :)
